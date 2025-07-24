@@ -6,9 +6,7 @@
   <title>ระบบจัดการสต็อก</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       font-family: 'Kanit', sans-serif;
       background: #f0f4f8;
@@ -18,14 +16,17 @@
       display: flex;
       justify-content: center;
       min-height: 100vh;
+      flex-direction: column;
+      align-items: center;
     }
     .container {
-      max-width: 900px;
+      max-width: 960px;
       width: 100%;
       background: white;
       padding: 30px 40px;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
     }
     h1 {
       text-align: center;
@@ -37,127 +38,98 @@
     .controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: 15px;
       justify-content: center;
       margin-bottom: 30px;
     }
     select, input[type="number"] {
-      flex: 1 1 220px;
-      padding: 14px 20px;
+      flex: 1 1 200px;
+      padding: 12px;
       font-size: 16px;
       border: 2px solid #d1d9e6;
       border-radius: 10px;
-      transition: border-color 0.3s ease;
-      outline-offset: 2px;
-      outline-color: transparent;
-      cursor: pointer;
-      background-color: #fff;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-    }
-    select:focus, input[type="number"]:focus {
-      border-color: #2980b9;
-      outline-color: #2980b9;
-      box-shadow: 0 0 8px rgba(41,128,185,0.4);
-      background-color: #fefefe;
-    }
-    input[type="number"] {
-      max-width: 140px;
     }
     button {
-      flex: 1 1 130px;
-      padding: 14px 0;
-      font-size: 16px;
+      flex: 1 1 150px;
+      padding: 12px 0;
+      font-size: 15px;
       font-weight: 600;
       border: none;
       border-radius: 10px;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       color: white;
-      transition: background-color 0.3s ease, transform 0.15s ease;
-      user-select: none;
+      transition: background-color 0.3s, transform 0.2s;
     }
-    button.withdraw {
-      background: #e74c3c;
-    }
-    button.add {
-      background: #27ae60;
-    }
-    button:hover {
-      filter: brightness(1.1);
-      transform: translateY(-2px);
-    }
-    button:active {
-      transform: translateY(1px);
-    }
+    button:hover { transform: translateY(-1px); }
+    .withdrawPO { background: #e74c3c; }
+    .withdrawTemp { background: #d35400; }
+    .addPO { background: #27ae60; }
+    .addTemp { background: #2980b9; }
     table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0 8px;
       margin-bottom: 30px;
     }
-    thead th:first-child {
-      background-color: #2980b9; /* สีหัวข้อรายการ */
+    thead th {
+      background-color: #34495e;
       color: white;
       font-weight: 600;
-      padding: 15px 20px;
-      text-align: left;
-      border-radius: 10px 0 0 10px;
-      user-select: none;
+      padding: 12px;
+      text-align: center;
+      border-radius: 6px;
     }
-    thead th:last-child {
-      background-color: #27ae60; /* สีหัวข้อจำนวน */
-      color: white;
-      font-weight: 600;
-      padding: 15px 20px;
-      text-align: left;
-      border-radius: 0 10px 10px 0;
-      user-select: none;
+    thead th:nth-child(2) {
+      background-color: #2ecc71;
+    }
+    thead th:nth-child(3) {
+      background-color: #3498db;
     }
     tbody tr {
       background: #ffffff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      transition: background-color 0.3s ease;
-      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      border-radius: 6px;
+      transition: background 0.3s;
     }
     tbody tr:hover {
-      background-color: #d6e9ff;
-    }
-    tbody tr:nth-child(odd) {
-      background-color: #f9fbff;
+      background-color: #ecf6ff;
     }
     tbody td {
-      padding: 15px 20px;
-      font-size: 15.5px;
-      border: none;
+      padding: 12px;
+      text-align: center;
+      font-size: 15px;
     }
     tbody td:first-child {
-      color: #000000; /* สีดำ รายการชื่อสินค้า */
+      text-align: left;
+      color: #000;
       font-weight: 600;
-    }
-    tbody td:last-child {
-      color: #e67e22; /* สีส้ม จำนวนคงเหลือ */
-      font-weight: 600;
-      text-align: right;
     }
     .log-section {
-      margin-top: 20px;
-    }
-    h3 {
-      font-weight: 700;
-      margin-bottom: 12px;
+      max-width: 960px;
+      width: 100%;
+      background: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      font-size: 14px;
       color: #34495e;
+    }
+    .log-section h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
     }
     #searchLog {
       width: 100%;
-      padding: 12px 18px;
+      padding: 10px 15px;
       font-size: 16px;
       border-radius: 10px;
       border: 2px solid #d1d9e6;
       margin-bottom: 15px;
-      transition: border-color 0.3s ease;
       outline-offset: 2px;
       outline-color: transparent;
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      transition: border-color 0.3s ease;
     }
     #searchLog:focus {
       border-color: #2980b9;
@@ -172,8 +144,6 @@
       padding: 15px 20px;
       border-radius: 10px;
       border: 1.5px solid #d1d9e6;
-      font-size: 14.5px;
-      color: #2c3e50;
       box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
       user-select: none;
     }
@@ -189,51 +159,39 @@
       color: #27ae60;
       font-weight: 600;
     }
-    @media (max-width: 600px) {
-      .controls {
-        flex-direction: column;
-        gap: 15px;
-      }
-      select, input[type="number"], button {
-        flex: 1 1 100%;
-        max-width: 100%;
-      }
-      tbody td {
-        font-size: 14px;
-      }
-    }
   </style>
 </head>
 <body>
-  <div class="container" role="main">
+  <div class="container">
     <h1>ระบบจัดการสต็อก</h1>
-
     <div class="controls">
       <select id="itemSelect" aria-label="เลือกสินค้า"></select>
       <input type="number" id="amountInput" placeholder="จำนวน" min="1" aria-label="กรอกจำนวน" />
-      <button class="withdraw" onclick="withdraw()">เบิกของ</button>
-      <button class="add" onclick="addStock()">เติมของ</button>
+      <button class="withdrawPO" onclick="withdraw('po')">เบิก PO</button>
+      <button class="withdrawTemp" onclick="withdraw('temp')">เบิกชั่วคราว</button>
+      <button class="addPO" onclick="addStock('po')">เติม PO</button>
+      <button class="addTemp" onclick="addStock('temp')">เติมชั่วคราว</button>
     </div>
-
-    <table id="stockTable" aria-label="ตารางรายการสินค้า">
+    <table aria-label="ตารางสต็อกสินค้า">
       <thead>
         <tr>
-          <th>รายการของ</th>
-          <th>จำนวนคงเหลือ</th>
+          <th>รายการ</th>
+          <th>คงเหลือ PO</th>
+          <th>คงเหลือชั่วคราว</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody id="stockBody"></tbody>
     </table>
+  </div>
 
-    <div class="log-section">
-      <h3>ประวัติการเบิก-เติม</h3>
-      <input type="text" id="searchLog" oninput="renderLogs()" placeholder="ค้นหา log..." aria-label="ค้นหา log" />
-      <div class="log" id="logArea" aria-live="polite"></div>
-    </div>
+  <div class="log-section" aria-label="ประวัติการเบิก-เติม">
+    <h3>ประวัติการเบิก-เติม</h3>
+    <input type="text" id="searchLog" oninput="renderLogs()" placeholder="ค้นหา log..." aria-label="ค้นหา log" />
+    <div class="log" id="logArea" aria-live="polite" role="log"></div>
   </div>
 
   <script>
-    const defaultStock = [
+    const defaultItems = [
       ["Wall putty Bosny 5Kg", 8],
       ["สีทาผนัง 9 ลิตร โจตันเอสเซ้นอีซี่คลีน", 27],
       ["สีทาฝ้า 9 ลิตร ทรูบิวตี้ภายในด้าน", 0],
@@ -277,98 +235,108 @@
       ["เทปใส 2นิ้ว", 10]
     ];
 
-    const stockKey = "stockData";
-    const logKey = "stockLog";
+    // โหลด stock และ logs จาก localStorage หรือเติม default
+    const stock = JSON.parse(localStorage.getItem('stock')) || {};
+    const logs = JSON.parse(localStorage.getItem('stockLogs')) || [];
 
-    function loadStock() {
-      let data = JSON.parse(localStorage.getItem(stockKey));
-      if (!data) {
-        data = {};
-        defaultStock.forEach(([name, count]) => data[name] = count);
-        localStorage.setItem(stockKey, JSON.stringify(data));
+    defaultItems.forEach(([name, poQty]) => {
+      if (!stock[name]) {
+        stock[name] = { po: poQty, temp: 0 };
       }
-      return data;
+    });
+
+    // ลบรายการชื่อ "0" กับ "1"
+    delete stock["0"];
+    delete stock["1"];
+
+    function saveStock() {
+      localStorage.setItem('stock', JSON.stringify(stock));
     }
 
-    function saveStock(data) {
-      localStorage.setItem(stockKey, JSON.stringify(data));
-    }
-
-    function loadLogs() {
-      return JSON.parse(localStorage.getItem(logKey)) || [];
-    }
-
-    function saveLogs(logs) {
-      localStorage.setItem(logKey, JSON.stringify(logs));
+    function saveLogs() {
+      localStorage.setItem('stockLogs', JSON.stringify(logs));
     }
 
     function renderStock() {
-      const stock = loadStock();
-      const tbody = document.querySelector("#stockTable tbody");
-      const select = document.getElementById("itemSelect");
+      const tbody = document.getElementById('stockBody');
+      const select = document.getElementById('itemSelect');
       tbody.innerHTML = "";
       select.innerHTML = "";
-
-      Object.entries(stock).forEach(([name, count]) => {
-        const row = `<tr><td>${name}</td><td>${count}</td></tr>`;
-        tbody.insertAdjacentHTML("beforeend", row);
-        select.insertAdjacentHTML("beforeend", `<option value="${name}">${name}</option>`);
-      });
+      Object.entries(stock)
+        .filter(([name]) => name !== "0" && name !== "1")
+        .forEach(([name, { po, temp }]) => {
+          tbody.innerHTML += `<tr><td>${name}</td><td>${po}</td><td>${temp}</td></tr>`;
+          select.innerHTML += `<option value="${name}">${name}</option>`;
+        });
     }
 
     function renderLogs() {
-      const logs = loadLogs();
-      const search = document.getElementById("searchLog").value.toLowerCase();
-      const logArea = document.getElementById("logArea");
+      const search = document.getElementById('searchLog').value.toLowerCase();
+      const logArea = document.getElementById('logArea');
       logArea.innerHTML = "";
+
       logs
-        .filter(log => log.name.toLowerCase().includes(search))
-        .reverse()
+        .filter(log => log.name.toLowerCase().includes(search) || log.action.includes(search))
+        .slice().reverse()
         .forEach(log => {
-          const div = document.createElement("div");
+          const div = document.createElement('div');
           div.className = `log-entry ${log.action}`;
-          div.textContent = `${log.date} | ${log.action === "withdraw" ? "เบิก" : "เติม"} ${log.name} จำนวน ${log.amount}`;
+          div.textContent = `${log.date} | ${log.action === "withdraw" ? "เบิก" : "เติม"} (${log.type === "po" ? "PO" : "ชั่วคราว"}) ${log.name} จำนวน ${log.amount}`;
           logArea.appendChild(div);
         });
     }
 
-    function withdraw() {
-      const item = document.getElementById("itemSelect").value;
-      const amount = parseInt(document.getElementById("amountInput").value);
-      if (!amount || amount <= 0) return alert("กรุณากรอกจำนวน");
-
-      const stock = loadStock();
-      if (stock[item] < amount) return alert("จำนวนไม่พอเบิก");
-
-      stock[item] -= amount;
-      saveStock(stock);
-
-      const logs = loadLogs();
-      logs.push({ name: item, amount, action: "withdraw", date: new Date().toLocaleDateString() });
-      saveLogs(logs);
-
-      renderStock();
+    function addLog(name, amount, action, type) {
+      const date = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      logs.push({ name, amount, action, type, date });
+      saveLogs();
       renderLogs();
     }
 
-    function addStock() {
-      const item = document.getElementById("itemSelect").value;
+    function withdraw(type) {
+      const name = document.getElementById("itemSelect").value;
       const amount = parseInt(document.getElementById("amountInput").value);
-      if (!amount || amount <= 0) return alert("กรุณากรอกจำนวน");
-
-      const stock = loadStock();
-      stock[item] += amount;
-      saveStock(stock);
-
-      const logs = loadLogs();
-      logs.push({ name: item, amount, action: "add", date: new Date().toLocaleDateString() });
-      saveLogs(logs);
-
+      if (!amount || amount <= 0) {
+        alert("กรุณากรอกจำนวนให้ถูกต้อง");
+        return;
+      }
+      if (type === "temp") {
+        if (stock[name].temp >= amount) {
+          stock[name].temp -= amount;
+        } else if ((stock[name].temp + stock[name].po) >= amount) {
+          const amountLeft = amount - stock[name].temp;
+          stock[name].temp = 0;
+          stock[name].po -= amountLeft;
+        } else {
+          alert("คงเหลือไม่พอเบิก");
+          return;
+        }
+      } else {
+        if (stock[name].po >= amount) {
+          stock[name].po -= amount;
+        } else {
+          alert("คงเหลือไม่พอเบิก");
+          return;
+        }
+      }
+      saveStock();
+      addLog(name, amount, "withdraw", type);
       renderStock();
-      renderLogs();
     }
 
-    // โหลดข้อมูลตอนเปิดหน้า
+    function addStock(type) {
+      const name = document.getElementById("itemSelect").value;
+      const amount = parseInt(document.getElementById("amountInput").value);
+      if (!amount || amount <= 0) {
+        alert("กรุณากรอกจำนวนให้ถูกต้อง");
+        return;
+      }
+      stock[name][type] += amount;
+      saveStock();
+      addLog(name, amount, "add", type);
+      renderStock();
+    }
+
     renderStock();
     renderLogs();
   </script>
