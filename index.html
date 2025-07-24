@@ -211,13 +211,19 @@
       ["สีระเบียง Jotashield 8288", 5], ["เทปใส 2นิ้ว", 16]
     ];
 
-    const stock = items.map(([name, qty]) => ({
+    // โหลดข้อมูลจาก localStorage หรือเริ่มด้วย default items
+    const savedStock = localStorage.getItem("stockData");
+    const stock = savedStock ? JSON.parse(savedStock) : items.map(([name, qty]) => ({
       name,
       temp: 0,
       po: qty
     }));
 
     const logArea = document.getElementById("logArea");
+
+    function saveStockToLocalStorage() {
+      localStorage.setItem("stockData", JSON.stringify(stock));
+    }
 
     function updateTable() {
       const tbody = document.getElementById("stockTableBody");
@@ -233,6 +239,7 @@
 
       const select = document.getElementById("itemSelect");
       select.innerHTML = stock.map((item, i) => `<option value="${i}">${item.name}</option>`).join("");
+      saveStockToLocalStorage();
     }
 
     function addLog(text) {
