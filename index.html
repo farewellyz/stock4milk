@@ -1,344 +1,281 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ระบบจัดการสต็อก</title>
+  <meta charset="UTF-8">
+  <title>ระบบStockสำหรับมิ้ว 💖</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
-    * { box-sizing: border-box; }
     body {
       font-family: 'Kanit', sans-serif;
-      background: #f0f4f8;
-      margin: 0;
-      padding: 30px 15px;
-      color: #2c3e50;
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-      flex-direction: column;
-      align-items: center;
+      background: #fff0f5;
+      color: #333;
+      padding: 20px;
     }
-    .container {
-      max-width: 960px;
-      width: 100%;
-      background: white;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
-    }
+
     h1 {
       text-align: center;
-      margin-bottom: 40px;
-      font-weight: 700;
-      font-size: 2.6rem;
-      color: #34495e;
+      color: #d63384;
+      font-size: 2em;
     }
+
     .controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 10px;
       justify-content: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
-    select, input[type="number"] {
-      flex: 1 1 200px;
-      padding: 12px;
-      font-size: 16px;
-      border: 2px solid #d1d9e6;
+
+    select, input {
+      padding: 10px;
+      font-size: 1em;
+      border: 2px solid #ffb6c1;
       border-radius: 10px;
+      background: #fff;
     }
-    button {
-      flex: 1 1 150px;
-      padding: 12px 0;
-      font-size: 15px;
-      font-weight: 600;
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropbtn {
+      background-color: #ff69b4;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1em;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      color: white;
-      transition: background-color 0.3s, transform 0.2s;
     }
-    button:hover { transform: translateY(-1px); }
-    .withdrawPO { background: #e74c3c; }
-    .withdrawTemp { background: #d35400; }
-    .addPO { background: #27ae60; }
-    .addTemp { background: #2980b9; }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #fff0f5;
+      min-width: 120px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+      z-index: 1;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .dropdown-content a {
+      color: #d63384;
+      padding: 10px 12px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #ffe4e1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    button#restockBtn {
+      background-color: #6f42c1;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
     table {
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 8px;
-      margin-bottom: 30px;
-    }
-    thead th {
-      background-color: #34495e;
-      color: white;
-      font-weight: 600;
-      padding: 12px;
-      text-align: center;
-      border-radius: 6px;
-    }
-    thead th:nth-child(2) {
-      background-color: #2ecc71;
-    }
-    thead th:nth-child(3) {
-      background-color: #3498db;
-    }
-    tbody tr {
-      background: #ffffff;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-      border-radius: 6px;
-      transition: background 0.3s;
-    }
-    tbody tr:hover {
-      background-color: #ecf6ff;
-    }
-    tbody td {
-      padding: 12px;
-      text-align: center;
-      font-size: 15px;
-    }
-    tbody td:first-child {
-      text-align: left;
-      color: #000;
-      font-weight: 600;
-    }
-    .log-section {
-      max-width: 960px;
-      width: 100%;
+      border-collapse: collapse;
       background: white;
-      padding: 20px 30px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      font-size: 14px;
-      color: #34495e;
-    }
-    .log-section h3 {
-      margin-top: 0;
-      margin-bottom: 12px;
-    }
-    #searchLog {
-      width: 100%;
-      padding: 10px 15px;
-      font-size: 16px;
       border-radius: 10px;
-      border: 2px solid #d1d9e6;
-      margin-bottom: 15px;
-      outline-offset: 2px;
-      outline-color: transparent;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-      transition: border-color 0.3s ease;
+      overflow: hidden;
+      margin: 0 auto;
     }
-    #searchLog:focus {
-      border-color: #2980b9;
-      outline-color: #2980b9;
-      box-shadow: 0 0 8px rgba(41,128,185,0.4);
-      background-color: #fefefe;
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      /* no border */
     }
-    .log {
-      max-height: 280px;
+
+    th {
+      background-color: #ffc0cb;
+      color: #4b0082;
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: #fff0f5;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #ffe4e1;
+    }
+
+    tbody td:nth-child(2), tbody td:nth-child(3) {
+      font-weight: bold;
+      color: #8b008b;
+    }
+
+    tbody td:first-child {
+      text-align: center;
+    }
+
+    tr:hover {
+      background-color: #f7c9db;
+    }
+
+    /* log area */
+    #logArea {
+      margin: 20px auto 0;
+      width: 90%;
+      background: #fff0f5;
+      border: 2px solid #ffb6c1;
+      border-radius: 10px;
+      padding: 10px;
+      height: 160px;
       overflow-y: auto;
-      background: #fefefe;
-      padding: 15px 20px;
-      border-radius: 10px;
-      border: 1.5px solid #d1d9e6;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
-      user-select: none;
+      font-size: 0.9em;
+      color: #d63384;
+      box-shadow: inset 0 0 5px rgba(198, 50, 103, 0.2);
+      text-align: left;
+      white-space: normal;
+      font-family: 'Kanit', sans-serif;
     }
-    .log-entry {
-      margin-bottom: 8px;
-      line-height: 1.3;
-    }
-    .log-entry.withdraw {
-      color: #c0392b;
-      font-weight: 600;
-    }
-    .log-entry.add {
-      color: #27ae60;
-      font-weight: 600;
+
+    #logArea div {
+      padding: 3px 0;
+      border-bottom: 1px solid #f5b7cc;
+      display: block;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>ระบบจัดการสต็อก</h1>
-    <div class="controls">
-      <select id="itemSelect" aria-label="เลือกสินค้า"></select>
-      <input type="number" id="amountInput" placeholder="จำนวน" min="1" aria-label="กรอกจำนวน" />
-      <button class="withdrawPO" onclick="withdraw('po')">เบิก PO</button>
-      <button class="withdrawTemp" onclick="withdraw('temp')">เบิกชั่วคราว</button>
-      <button class="addPO" onclick="addStock('po')">เติม PO</button>
-      <button class="addTemp" onclick="addStock('temp')">เติมชั่วคราว</button>
+  <h1>ระบบStockสำหรับมิ้ว 💖</h1>
+
+  <div class="controls">
+    <select id="itemSelect"></select>
+    <input type="number" id="amountInput" placeholder="จำนวน" min="1" />
+
+    <div class="dropdown">
+      <button class="dropbtn">เบิก</button>
+      <div class="dropdown-content">
+        <a href="#" onclick="withdraw('temp')">เบิกชั่วคราว</a>
+        <a href="#" onclick="withdraw('po')">เบิก PO</a>
+      </div>
     </div>
-    <table aria-label="ตารางสต็อกสินค้า">
-      <thead>
-        <tr>
-          <th>รายการ</th>
-          <th>คงเหลือ PO</th>
-          <th>คงเหลือชั่วคราว</th>
-        </tr>
-      </thead>
-      <tbody id="stockBody"></tbody>
-    </table>
+
+    <div class="dropdown">
+      <button class="dropbtn">เติม</button>
+      <div class="dropdown-content">
+        <a href="#" onclick="addStock('temp')">เติมชั่วคราว</a>
+        <a href="#" onclick="addStock('po')">เติม PO</a>
+      </div>
+    </div>
+
+    <button id="restockBtn" onclick="restock()">Restock</button>
   </div>
 
-  <div class="log-section" aria-label="ประวัติการเบิก-เติม">
-    <h3>ประวัติการเบิก-เติม</h3>
-    <input type="text" id="searchLog" oninput="renderLogs()" placeholder="ค้นหา log..." aria-label="ค้นหา log" />
-    <div class="log" id="logArea" aria-live="polite" role="log"></div>
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>รายการ</th>
+        <th>คงเหลือชั่วคราว</th>
+        <th>คงเหลือ PO</th>
+      </tr>
+    </thead>
+    <tbody id="stockTableBody"></tbody>
+  </table>
+
+  <!-- Log แสดงที่นี่ -->
+  <div id="logArea" aria-live="polite" role="log" aria-label="ประวัติการเติมและเบิก"></div>
 
   <script>
-    const defaultItems = [
-      ["Wall putty Bosny 5Kg", 8],
-      ["สีทาผนัง 9 ลิตร โจตันเอสเซ้นอีซี่คลีน", 27],
-      ["สีทาฝ้า 9 ลิตร ทรูบิวตี้ภายในด้าน", 0],
-      ["กาวตะปู Maxbond", 11],
+    const items = [
+      ["Wall putty Bosny 5Kg", 8], ["สีทาผนัง 9 ลิตร โจตันเอสเซ้นอีซี่คลีน", 27],
+      ["สีทาฝ้า 9 ลิตร ทรูบิวตี้ภายในด้าน", 0], ["กาวตะปู Maxbond", 11],
       ["สีรองพื้นปูนเก่า 18 ลิตร TOA Contact Primer 18.925 lt", 0],
-      ["ปูนฉาบเสือฉาบบาง Lanko 110 สีขาว", 46],
-      ["ปูนสกิม TOA สีขาว", 9],
+      ["ปูนฉาบเสือฉาบบาง Lanko 110 สีขาว", 46], ["ปูนสกิม TOA สีขาว", 9],
       ["ตาข่ายสี่เหลี่ยม เบอร์ 24 ตาห่าง 1/2 นิ้ว ขนาด 0.9 x 30 เมตร", 0],
-      ["ToaSilicone Sealant : White 280 ml ขาวขุ่น", 68],
-      ["ปูนกาวเวเบอร์ 20 kg", 31],
-      ["ยิบซัม 9 มิล ลาด", 0],
-      ["ปูนฉาบยิบซัม", 17],
-      ["บลูชีท 1.8เมตร 25เมตร", 0],
-      ["พลาสติกซีลใส", 51],
-      ["ปูนยาแนว 0774 สีเทา", 30],
-      ["สกรูยิงฝ้าดำ 2x18mm. (100ตัว)", 0],
-      ["PU ซิลิโคน ขาว", 23],
-      ["PU ซิลิโคน เทา", 6],
-      ["แดป 303 Oak", 0],
-      ["แดป 303 ขาว", 0],
-      ["กาวตะปู Pattex", 19],
-      ["โครงฝ้าซีไลน์", 224],
-      ["กระดาษกาว 1 นิ้ว", 89],
-      ["กระดาษกาว 2 นิ้ว", 57],
-      ["กระดาษทราย เบอร์1 ตราจระเข้", 49],
-      ["กระดาษทราย เบอร์3 ตราจระเข้", 0],
-      ["กระดาษทราย เบอร์4 ตราจระเข้", 10],
-      ["ปูนยาแนว 0723 สีครีม", 10],
-      ["กาวลาเท็ก TOA", 6],
-      ["Epoxy A+B Putty", 3],
-      ["Epoxy Alteco 2 ton", 76],
-      ["สกรูดำ 6*1", 1],
-      ["กระเบื้องห้องแขก", 112],
-      ["หลอดไฟ Corridor", 11],
-      ["เทปไฟเบอร์", 96],
-      ["พลาสติกคลุมของม้วนเล็ก", 49],
-      ["พลาสติกคลุมของม้วนใหญ่", 5],
-      ["เทปผ้ายิปซั่ม", 0],
-      ["สีระเบียง Jotashield 8287", 8],
-      ["สีระเบียง Jotashield 8288", 6],
-      ["เทปใส 2นิ้ว", 10]
+      ["ToaSilicone Sealant : White 280 ml ขาวขุ่น", 68], ["ปูนกาวเวเบอร์ 20 kg", 31],
+      ["ยิบซัม 9 มิล ลาด", 0], ["ปูนฉาบยิบซัม", 17], ["บลูชีท 1.8เมตร 25เมตร", 0],
+      ["พลาสติกซีลใส", 51], ["ปูนยาแนว 0774 สีเทา", 30], ["สกรูยิงฝ้าดำ 2x18mm. (100ตัว)", 0],
+      ["PU ซิลิโคน ขาว", 23], ["PU ซิลิโคน เทา", 6], ["แดป 303 Oak", 0],
+      ["แดป 303 ขาว", 0], ["กาวตะปู Pattex", 19], ["โครงฝ้าซีไลน์", 224],
+      ["กระดาษกาว 1 นิ้ว", 89], ["กระดาษกาว 2 นิ้ว", 57], ["กระดาษทราย เบอร์1 ตราจระเข้", 49],
+      ["กระดาษทราย เบอร์3 ตราจระเข้", 0], ["กระดาษทราย เบอร์4 ตราจระเข้", 10],
+      ["ปูนยาแนว 0723 สีครีม", 10], ["กาวลาเท็ก TOA", 6], ["Epoxy A+B Putty", 3],
+      ["Epoxy Alteco 2 ton", 76], ["สกรูดำ 6*1", 1], ["กระเบื้องห้องแขก", 112],
+      ["หลอดไฟ Corridor", 11], ["เทปไฟเบอร์", 96], ["พลาสติกคลุมของม้วนเล็ก", 49],
+      ["พลาสติกคลุมของม้วนใหญ่", 5], ["เทปผ้ายิปซั่ม", 0], ["สีระเบียง Jotashield 8287", 8],
+      ["สีระเบียง Jotashield 8288", 6], ["เทปใส 2นิ้ว", 10]
     ];
 
-    // โหลด stock และ logs จาก localStorage หรือเติม default
-    const stock = JSON.parse(localStorage.getItem('stock')) || {};
-    const logs = JSON.parse(localStorage.getItem('stockLogs')) || [];
+    const stock = items.map(([name, qty]) => ({
+      name,
+      temp: 0,
+      po: qty
+    }));
 
-    defaultItems.forEach(([name, poQty]) => {
-      if (!stock[name]) {
-        stock[name] = { po: poQty, temp: 0 };
-      }
-    });
+    const logArea = document.getElementById("logArea");
 
-    // ลบรายการชื่อ "0" กับ "1"
-    delete stock["0"];
-    delete stock["1"];
-
-    function saveStock() {
-      localStorage.setItem('stock', JSON.stringify(stock));
-    }
-
-    function saveLogs() {
-      localStorage.setItem('stockLogs', JSON.stringify(logs));
-    }
-
-    function renderStock() {
-      const tbody = document.getElementById('stockBody');
-      const select = document.getElementById('itemSelect');
+    function updateTable() {
+      const tbody = document.getElementById("stockTableBody");
       tbody.innerHTML = "";
-      select.innerHTML = "";
-      Object.entries(stock)
-        .filter(([name]) => name !== "0" && name !== "1")
-        .forEach(([name, { po, temp }]) => {
-          tbody.innerHTML += `<tr><td>${name}</td><td>${po}</td><td>${temp}</td></tr>`;
-          select.innerHTML += `<option value="${name}">${name}</option>`;
-        });
+      stock.forEach((item, index) => {
+        const row = `<tr>
+          <td>${item.name}</td>
+          <td>${item.temp}</td>
+          <td>${item.po}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+
+      const select = document.getElementById("itemSelect");
+      select.innerHTML = stock.map((item, i) => `<option value="${i}">${item.name}</option>`).join("");
     }
 
-    function renderLogs() {
-      const search = document.getElementById('searchLog').value.toLowerCase();
-      const logArea = document.getElementById('logArea');
-      logArea.innerHTML = "";
-
-      logs
-        .filter(log => log.name.toLowerCase().includes(search) || log.action.includes(search))
-        .slice().reverse()
-        .forEach(log => {
-          const div = document.createElement('div');
-          div.className = `log-entry ${log.action}`;
-          div.textContent = `${log.date} | ${log.action === "withdraw" ? "เบิก" : "เติม"} (${log.type === "po" ? "PO" : "ชั่วคราว"}) ${log.name} จำนวน ${log.amount}`;
-          logArea.appendChild(div);
-        });
-    }
-
-    function addLog(name, amount, action, type) {
-      const date = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: '2-digit', day: '2-digit' });
-      logs.push({ name, amount, action, type, date });
-      saveLogs();
-      renderLogs();
-    }
-
-    function withdraw(type) {
-      const name = document.getElementById("itemSelect").value;
-      const amount = parseInt(document.getElementById("amountInput").value);
-      if (!amount || amount <= 0) {
-        alert("กรุณากรอกจำนวนให้ถูกต้อง");
-        return;
-      }
-      if (type === "temp") {
-        if (stock[name].temp >= amount) {
-          stock[name].temp -= amount;
-        } else if ((stock[name].temp + stock[name].po) >= amount) {
-          const amountLeft = amount - stock[name].temp;
-          stock[name].temp = 0;
-          stock[name].po -= amountLeft;
-        } else {
-          alert("คงเหลือไม่พอเบิก");
-          return;
-        }
-      } else {
-        if (stock[name].po >= amount) {
-          stock[name].po -= amount;
-        } else {
-          alert("คงเหลือไม่พอเบิก");
-          return;
-        }
-      }
-      saveStock();
-      addLog(name, amount, "withdraw", type);
-      renderStock();
+    function addLog(text) {
+      const now = new Date();
+      const timeString = now.toLocaleString('th-TH', {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+      const div = document.createElement("div");
+      div.textContent = `[${timeString}] ${text}`;
+      logArea.prepend(div);
     }
 
     function addStock(type) {
-      const name = document.getElementById("itemSelect").value;
+      const index = document.getElementById("itemSelect").value;
       const amount = parseInt(document.getElementById("amountInput").value);
-      if (!amount || amount <= 0) {
-        alert("กรุณากรอกจำนวนให้ถูกต้อง");
-        return;
-      }
-      stock[name][type] += amount;
-      saveStock();
-      addLog(name, amount, "add", type);
-      renderStock();
+      if (!amount || amount < 1) return alert("ใส่จำนวนให้ถูกต้อง");
+      stock[index][type] += amount;
+      updateTable();
+      addLog(`เติม ${type === 'po' ? 'PO' : 'ชั่วคราว'}: ${stock[index].name} จำนวน +${amount}`);
     }
 
-    renderStock();
-    renderLogs();
+    function withdraw(type) {
+      const index = document.getElementById("itemSelect").value;
+      const amount = parseInt(document.getElementById("amountInput").value);
+      if (!amount || amount < 1) return alert("ใส่จำนวนให้ถูกต้อง");
+      if (stock[index][type] < amount) return alert("จำนวนไม่พอให้เบิก");
+
+      stock[index][type] -= amount;
+      updateTable();
+      addLog(`เบิก ${type === 'po' ? 'PO' : 'ชั่วคราว'}: ${stock[index].name} จำนวน -${amount}`);
+    }
+
+    function restock() {
+      stock.forEach(item => {
+        item.po += item.temp;
+        item.temp = 0;
+      });
+      updateTable();
+      addLog("Restock: ย้ายจำนวนชั่วคราวทั้งหมดไปเพิ่ม PO");
+    }
+
+    updateTable();
   </script>
 </body>
 </html>
